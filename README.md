@@ -4,7 +4,7 @@ It has been said that humans are suckers for visuals.  Visualizations and dashbo
 have  become the goto-way means of displaying complex information succintly and compactly!
 #NGX Dashboad# displays the entire NGX Market in near-real-time and more.
 
-![](./image/ngx_dashboard.gif)
+![](https://github.com/ajakaiye33/ngx-dashboard/blob/master/image/ngx_dashboard.gif)
 
 ![](./image/temp.png)
 
