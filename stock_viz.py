@@ -11,8 +11,7 @@ from wordcloud import WordCloud
 
 from stock_view.data_prep import data_load, insider_data
 from stock_view.data_prep import top_gainers, top_losers
-
-# import streamlit.components.v1 as components
+#import streamlit.components.v1 as components
 
 
 matplotlib.use("agg")
@@ -63,7 +62,7 @@ def wrd_viz(stringy):
         plt.axis("off")
         plt.imshow(wrdcld, interpolation="bilinear")
         # plt.show()
-    except Exception as e:  # noqa
+    except Exception:  # noqa
         st.text("Ooops! ... Refresh browser now")
 
 
@@ -146,7 +145,7 @@ try:
         )
         st.plotly_chart(monei)
 
-except Exception as e:  # noqa
+except Exception:  # noqa
     st.text(
         "Ooops! ... Sorry, Can't retrieve data right now, try later"
         "/Refresh browser. Meanwhile see historical performance below"

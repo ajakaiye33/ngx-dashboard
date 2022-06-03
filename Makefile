@@ -19,3 +19,5 @@ run:
 deploy:
 	#deploy
 all:install format lint build run
+
+
