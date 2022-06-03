@@ -16,5 +16,7 @@ have  become the goto-way means of displaying complex information succintly and 
 ## How to Use:
 
 1. create a virtual environment `virtualenv ~/.venv`
-2. clone the repo ` git clone ngx-dashboards.gt`
-3. run `make all`
+2. clone the repo ` git clone https://github.com/ajakaiye33/ngx-dashboard.git`
+3. run `make install`
+4. run `streamlit run stock_viz.py --server.port 8501`
+5. Go over to your browser and point accordingly

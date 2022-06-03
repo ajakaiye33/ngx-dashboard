@@ -11,7 +11,8 @@ from wordcloud import WordCloud
 
 from stock_view.data_prep import data_load, insider_data
 from stock_view.data_prep import top_gainers, top_losers
-#import streamlit.components.v1 as components
+
+# import streamlit.components.v1 as components
 
 
 matplotlib.use("agg")
