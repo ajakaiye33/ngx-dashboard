@@ -7,7 +7,7 @@ format:
 	#format code
 	black *.py stock_view/*.py
 lint:
-	pylint --disable=R,C *.py stock_view/*.py
+	pylint --disable=R,C,broad-except *.py stock_view/*.py
 test:
 	#test
 build:
