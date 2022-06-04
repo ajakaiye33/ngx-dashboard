@@ -17,7 +17,7 @@ complex information are succintly and compactly presented!
 ## How to Use:
 
 1. create a new folder and a virtual environment `virtualenv ~/.venv` or `python3.10 -m env venv`
-2. activate the virtual environment e.g `venv/bin/activate`
+2. activate the virtual environment e.g `source venv/bin/activate`
 3. clone the repo `git clone https://github.com/ajakaiye33/ngx-dashboard.git`
 3. run `make install`
 4. run `streamlit run stock_viz.py --server.port 8501`
