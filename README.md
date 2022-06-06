@@ -1,3 +1,5 @@
+[![Visualize Performance Of Stocks On NGX](https://github.com/ajakaiye33/ngx-dashboard/actions/workflows/main.yml/badge.svg)](https://github.com/ajakaiye33/ngx-dashboard/actions/workflows/main.yml)
+
 ## NGX Dashboard
 
 It has been said that humans are visual animals.Little wonder visualizations and dashboards 
