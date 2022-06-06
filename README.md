@@ -5,7 +5,7 @@
 It has been said that humans are visual animals.Little wonder visualizations and dashboards 
 have taken the data analytics world by storm. Through visualizations,
 complex information are succintly and compactly presented!
-#NGX Dashboard# displays the entire NGX Market in near-real-time and more.
+*NGX Dashboard* displays the entire NGX Market in near-real-time and more.
 
 
 ![](./image/temp.png)

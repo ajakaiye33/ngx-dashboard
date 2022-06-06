@@ -207,3 +207,6 @@ with col1:
 with col2:
     st.subheader("Todays Top Losers")
     st.write(top_l)
+    
+
+    
