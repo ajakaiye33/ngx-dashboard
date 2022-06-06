@@ -26,3 +26,5 @@ complex information are succintly and compactly presented!
 5. run `make install`
 6. run `streamlit run stock_viz.py --server.port 8501`
 7. Go over to your browser and point accordingly
+
+Find it useful? .. give it a **star**! :wink:
