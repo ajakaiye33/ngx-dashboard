@@ -5,6 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    with:
+      fetch-depth: 0
     - name: Set up Python 3.8
       uses: actions/setup-python@v1
       with:
@@ -25,25 +27,7 @@ jobs:
       run: |
         make build
         
-        
-     - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
-
-  custom-deploy:
-    # The `needs` is added to bypass:
-    # "Your account has reached its concurrent builds limit"
-    needs: heroku-deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Heroku login credentials
+    - name: Heroku login credentials
         run: |
           cat > ~/.netrc <<EOF
             machine api.heroku.com
@@ -62,4 +46,8 @@ jobs:
           HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
       - name: Push to Heroku
         run: git push heroku master
+        
+     
+     
+  
     
