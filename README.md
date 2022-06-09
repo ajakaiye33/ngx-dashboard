@@ -28,6 +28,6 @@ complex information are succintly and compactly presented!
   6. run `streamlit run stock_viz.py --server.port 8501`
   7. Go over to your browser and point accordingly
 
-Alternative copy and paste in a browser the url: `https://stock-das.herokuapp.com/`
+Alternatively copy and paste in a browser the url: `https://stock-das.herokuapp.com/`
 
 Find it useful? .. give it a **star**! :wink:
