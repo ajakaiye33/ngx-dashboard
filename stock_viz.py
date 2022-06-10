@@ -12,7 +12,7 @@ from wordcloud import WordCloud
 from stock_view.data_prep import data_load, insider_data
 from stock_view.data_prep import top_gainers, top_losers
 
-# import streamlit.components.v1 as components
+import streamlit.components.v1 as components
 
 
 matplotlib.use("agg")
@@ -213,3 +213,27 @@ try:
         st.write(top_l)
 except Exception as e:
     st.text("Ooops!... Sorry can't retrieve data at the moment,try later!")
+
+
+
+
+components.html(
+    """
+<!-- Default Statcounter code for nsedash
+https://stock-das.herokuapp.com/ -->
+<script type="text/javascript">
+var sc_project=12556146;
+var sc_invisible=1;
+var sc_security="f71a25cb";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="https://c.statcounter.com/12556146/0/f71a25cb/1/"
+alt="Web Analytics"></a></div></noscript>
+<!-- End of Statcounter Code -->
+"""
+)
