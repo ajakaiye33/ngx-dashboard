@@ -192,21 +192,24 @@ try:
 
 except Exception as e:  # noqa
     st.text(
-        "Ooops! ... Sorry, Can't retrieve data right now, try later"
-        "/Refresh browser.Meanwhile see historical performance below"
+        "Ooops! ... Sorry, Can't retrieve data at the moment, try later"
+        "/Refresh browser."
     )
+
+
 # top gainers and losers  columns
 
 top_g = top_gainers(data)
 top_l = top_losers(data)
 
-col1, col2 = st.columns(2)
-with col1:
-    st.subheader("Todays Top Gainers")
-    st.write(top_g)
-with col2:
-    st.subheader("Todays Top Losers")
-    st.write(top_l)
-    
+try:
 
-    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Todays Top Gainers")
+        st.write(top_g)
+    with col2:
+        st.subheader("Todays Top Losers")
+        st.write(top_l)
+except Exception as e:
+    st.text("Ooops!... Sorry can't retrieve data at the moment,try later!")
