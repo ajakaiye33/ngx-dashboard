@@ -1,6 +1,6 @@
 """
 Created on Tue Jun 17 00:59:25 2021
-@author: Hedgar Ajkz
+@author: Hedgar Ajakaiye
 """
 
 import streamlit as st
