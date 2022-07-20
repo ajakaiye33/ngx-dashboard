@@ -78,14 +78,16 @@ def top_losers(df):
     ]
     df = df.drop(remove, axis=1)
     return df
-#Index & its metric
+
+
+# Index & its metric
 
 AP = "https://doclib.ngxgroup.com/REST/api/chartdata/"
 
-#NGX50
+# NGX50
 def ngx_50_index():
-    ng50 = 'NGX50'
-    URL = f'{AP}{ng50}'
+    ng50 = "NGX50"
+    URL = f"{AP}{ng50}"
     url_req = get(URL)
     soup = json.dumps(url_req)
     df = pd.read_json(soup)
@@ -93,9 +95,10 @@ def ngx_50_index():
     ngx50["date"] = pd.to_datetime(ngx50["date"], unit="ms")
     return ngx50
 
-#NGX30
+
+# NGX30
 def ngx_30_index():
-    ng30 = 'NGX30'
+    ng30 = "NGX30"
     URL = f"{AP}{ng30}"
     url_req = get(URL)
     soup = json.dumps(url_req)
@@ -104,9 +107,10 @@ def ngx_30_index():
     ngx30["date"] = pd.to_datetime(ngx30["date"], unit="ms")
     return ngx30
 
-#NGXPENSION
+
+# NGXPENSION
 def ngx_pension_index():
-    ngpens = 'NGXPENSION'
+    ngpens = "NGXPENSION"
     URL = f"{AP}{ngpens}"
     url_req = get(URL)
     soup = json.dumps(url_req)
@@ -114,73 +118,78 @@ def ngx_pension_index():
     ngxpen = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
     ngxpen["date"] = pd.to_datetime(ngxpen["date"], unit="ms")
     return ngxpen
-    
-# current NGX50    
+
+
+# current NGX50
 def current_p50():
-    curr50 = 'NGX50'
+    curr50 = "NGX50"
     html = f"{AP}{curr50}"
 
     url = get(html)
     soup = json.dumps(url)
     df = pd.read_json(soup)
-    df = df.iloc[0,1]
+    df = df.iloc[0, 1]
     return df
-    
-#current NGX30   
+
+
+# current NGX30
 def current_p30():
-    curr30 = 'NGX30'
+    curr30 = "NGX30"
     html = f"{AP}{curr30}"
 
     url = get(html)
     soup = json.dumps(url)
     df = pd.read_json(soup)
-    df = df.iloc[0,1]
+    df = df.iloc[0, 1]
     return df
 
-#current NGXPENSION    
+
+# current NGXPENSION
 def current_pens():
-    currp = 'NGXPENSION'
+    currp = "NGXPENSION"
     html = f"{AP}{currp}"
 
     url = get(html)
     soup = json.dumps(url)
     df = pd.read_json(soup)
-    df = df.iloc[0,1]
+    df = df.iloc[0, 1]
     return df
-    
-#previous NGX50   
+
+
+# previous NGX50
 def yesterday_p50():
-    yes50 = 'NGX50'
+    yes50 = "NGX50"
     html = f"{AP}{yes50}"
     url = get(html)
     soup = json.dumps(url)
     df = pd.read_json(soup)
-    ngx30 = pd.DataFrame(df['IndiciesData'].to_list(),columns=['date','prices'])
-    ngx30['date'] = pd.to_datetime(ngx30['date'],unit='ms')
-    pricey = ngx30.iloc[-2,1]
+    ngx30 = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
+    ngx30["date"] = pd.to_datetime(ngx30["date"], unit="ms")
+    pricey = ngx30.iloc[-2, 1]
     return pricey
 
-#previous NGX30
+
+# previous NGX30
 def yesterday_p30():
-    yes30 = 'NGX30'
+    yes30 = "NGX30"
     html = f"{AP}{yes30}"
     url = get(html)
     soup = json.dumps(url)
     df = pd.read_json(soup)
-    ngx30 = pd.DataFrame(df['IndiciesData'].to_list(),columns=['date','prices'])
-    ngx30['date'] = pd.to_datetime(ngx30['date'],unit='ms')
-    pricey = ngx30.iloc[-2,1]
+    ngx30 = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
+    ngx30["date"] = pd.to_datetime(ngx30["date"], unit="ms")
+    pricey = ngx30.iloc[-2, 1]
     return pricey
-    
-    
-#previous NGXPENSION
+
+
+# previous NGXPENSION
 def yesterday_pens():
-    yesp = 'NGXPENSION'
+    yesp = "NGXPENSION"
     html = f"{AP}{yesp}"
     url = get(html)
     soup = json.dumps(url)
     df = pd.read_json(soup)
-    ngx30 = pd.DataFrame(df['IndiciesData'].to_list(),columns=['date','prices'])
-    ngx30['date'] = pd.to_datetime(ngx30['date'],unit='ms')
-    pricey = ngx30.iloc[-2,1]
+    ngx30 = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
+    ngx30["date"] = pd.to_datetime(ngx30["date"], unit="ms")
+    pricey = ngx30.iloc[-2, 1]
     return pricey

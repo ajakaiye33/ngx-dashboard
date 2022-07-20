@@ -193,13 +193,10 @@ try:
         )
         st.plotly_chart(deals)
 
-except Exception as e:  # noqa
+except Exception:  # noqa
     st.text(
-        "Ooops! ... Sorry, Can't retrieve data at the moment, try later"
-        "/Refresh browser."
-    )
+        "Ooops! ... Sorry, Can't retrieve data at the moment, try later")
 # indecies
-
 
 
 try:
@@ -209,28 +206,30 @@ try:
     ngx50_prev_prix = yesterday_p50()
     ngx30_prev_prix = yesterday_p30()
     ngxpension_priv_prix = yesterday_pens()
-    
+
     diff_50 = ngx50_current_prix - ngx50_prev_prix
-    diff_50 = round(diff_50,2)
+    diff_50 = round(diff_50, 2)
     diff_30 = ngx30_current_prix - ngx30_prev_prix
-    diff_30 = round(diff_30,2)
+    diff_30 = round(diff_30, 2)
     diff_pens = ngxpension_current_prix - ngxpension_priv_prix
-    diff_pens = round(diff_30,2)
-    
+    diff_pens = round(diff_30, 2)
+
     ngx50_metric, ngx30_metric, ngxpens_metric = st.columns(3)
-    ngx50_metric.metric(label="NGX50 Index", value= ngx50_current_prix,delta=diff_50)
-    ngx30_metric.metric(label="NGX30 Index", value= ngx30_current_prix,delta=diff_30)
-    ngxpens_metric.metric(label="NGX PENSION Index", value=ngxpension_current_prix,delta=diff_pens)
-except Exception as e:
+    ngx50_metric.metric(label="NGX50 Index", value=ngx50_current_prix, delta=diff_50)
+    ngx30_metric.metric(label="NGX30 Index", value=ngx30_current_prix, delta=diff_30)
+    ngxpens_metric.metric(
+        label="NGX PENSION Index", value=ngxpension_current_prix, delta=diff_pens
+    )
+except Exception:
     st.text("Sorry, Can't retrieve data at the moment, try later")
-    
+
 
 def viz_index():
     try:
         ngx_50 = ngx_50_index()
         ngx_30 = ngx_30_index()
         ngx_pension = ngx_pension_index()
-    
+
         fifty, thirty, pens = st.columns(3)
         with fifty:
             fig1 = px.line(ngx_50, x="date", y="prices", title="NGX 50 Index")
@@ -241,15 +240,11 @@ def viz_index():
         with pens:
             fig3 = px.line(ngx_pension, x="date", y="prices", title="NGX PENSION Index")
             st.plotly_chart(fig3)
-    except Exception as e:
+    except Exception:
         st.text("Sorry, Can't retrieve data at the moment")
 
+
 viz_index()
-
-
-
-
-
 
 
 # top gainers and losers  columns
@@ -266,7 +261,7 @@ try:
     with col2:
         st.subheader("Todays Top Losers")
         st.write(top_l)
-except Exception as e:
+except Exception:
     st.text("Ooops!... Sorry can't retrieve data at the moment,try later!")
 
 
