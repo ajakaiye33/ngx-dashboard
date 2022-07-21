@@ -194,8 +194,7 @@ try:
         st.plotly_chart(deals)
 
 except Exception:  # noqa
-    st.text(
-        "Ooops! ... Sorry, Can't retrieve data at the moment, try later")
+    st.text("Ooops! ... Sorry, Can't retrieve data at the moment, try later")
 # indecies
 
 
@@ -208,17 +207,21 @@ try:
     ngxpension_priv_prix = yesterday_pens()
 
     diff_50 = ngx50_current_prix - ngx50_prev_prix
-    diff_50 = round(diff_50, 2)
+    diff_50 = round(diff_50 / ngx50_current_prix, 2)
     diff_30 = ngx30_current_prix - ngx30_prev_prix
-    diff_30 = round(diff_30, 2)
+    diff_30 = round(diff_30 / ngx30_current_prix, 2)
     diff_pens = ngxpension_current_prix - ngxpension_priv_prix
-    diff_pens = round(diff_30, 2)
+    diff_pens = round(diff_pens / ngxpension_current_prix, 2)
 
     ngx50_metric, ngx30_metric, ngxpens_metric = st.columns(3)
-    ngx50_metric.metric(label="NGX50 Index", value=ngx50_current_prix, delta=diff_50)
-    ngx30_metric.metric(label="NGX30 Index", value=ngx30_current_prix, delta=diff_30)
+    ngx50_metric.metric(
+        label="NGX50 Index", value=ngx50_current_prix, delta=f"{diff_50}%"
+    )
+    ngx30_metric.metric(
+        label="NGX30 Index", value=ngx30_current_prix, delta=f"{diff_30}%"
+    )
     ngxpens_metric.metric(
-        label="NGX PENSION Index", value=ngxpension_current_prix, delta=diff_pens
+        label="NGX PENSION Index", value=ngxpension_current_prix, delta=f"{diff_pens}%"
     )
 except Exception:
     st.text("Sorry, Can't retrieve data at the moment, try later")
