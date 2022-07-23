@@ -12,8 +12,9 @@ from wordcloud import WordCloud
 from stock_view.data_prep import data_load, insider_data
 from stock_view.data_prep import top_gainers, top_losers
 from stock_view.data_prep import ngx_50_index, ngx_30_index, ngx_pension_index
-from stock_view.data_prep import current_p50, current_p30, current_pens
-from stock_view.data_prep import yesterday_p50, yesterday_p30, yesterday_pens
+
+# from stock_view.data_prep import current_p50, current_p30, current_pens
+# from stock_view.data_prep import yesterday_p50, yesterday_p30, yesterday_pens
 
 import streamlit.components.v1 as components
 
@@ -199,19 +200,27 @@ except Exception:  # noqa
 
 
 try:
-    ngx50_current_prix = current_p50()
-    ngx30_current_prix = current_p30()
-    ngxpension_current_prix = current_pens()
-    ngx50_prev_prix = yesterday_p50()
-    ngx30_prev_prix = yesterday_p30()
-    ngxpension_priv_prix = yesterday_pens()
+    ngx50_current_prix_i = ngx_50_index()
+    ngx50_current_prix = ngx50_current_prix_i.iloc[-1, 1]
+    ngx30_current_prix_i = ngx_30_index()
+    ngx30_current_prix = ngx30_current_prix_i.iloc[-1, 1]
+    ngxpension_current_prix_i = ngx_pension_index()
+    ngxpension_current_prix = ngxpension_current_prix_i.iloc[-1, 1]
+    ngx50_prev_prix = ngx50_current_prix_i.iloc[-2, 1]
+    ngx30_prev_prix = ngx30_current_prix_i.iloc[-2, 1]
+    ngxpension_priv_prix = ngxpension_current_prix_i.iloc[-2, 1]
 
-    diff_50 = ngx50_current_prix - ngx50_prev_prix
-    diff_50 = round(diff_50 / ngx50_current_prix, 2)
-    diff_30 = ngx30_current_prix - ngx30_prev_prix
-    diff_30 = round(diff_30 / ngx30_current_prix, 2)
-    diff_pens = ngxpension_current_prix - ngxpension_priv_prix
-    diff_pens = round(diff_pens / ngxpension_current_prix, 2)
+    diff_50 = round(
+        ((ngx50_current_prix - ngx50_prev_prix) / ngx50_current_prix) * 100, 2
+    )
+    diff_30 = round(
+        ((ngx30_current_prix - ngx30_prev_prix) / ngx30_current_prix) * 100, 2
+    )
+    diff_pens = round(
+        ((ngxpension_current_prix - ngxpension_priv_prix) / ngxpension_current_prix)
+        * 100,
+        2,
+    )
 
     ngx50_metric, ngx30_metric, ngxpens_metric = st.columns(3)
     ngx50_metric.metric(
