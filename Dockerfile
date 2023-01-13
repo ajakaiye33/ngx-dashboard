@@ -1,7 +1,7 @@
 FROM python:3.8.13-slim-buster
-EXPOSE 8501
-WORKDIR /stock_viz
+WORKDIR /app
 COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
-COPY . .
-CMD streamlit run stock_viz.py
+EXPOSE 8501
+COPY . /app
+ENTRYPOINT ["streamlit", "run", "stock_viz.py", "--server.port=8501"]
