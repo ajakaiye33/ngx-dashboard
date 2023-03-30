@@ -1,3 +1,8 @@
+"""
+Created on Tue Jun 17 00:59:25 2021
+@author: Hedgar Ajakaiye
+"""
+
 import pandas as pd
 import json
 from gazpacho import get
