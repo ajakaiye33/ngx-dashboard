@@ -78,7 +78,22 @@ def top_losers(df):
     ]
     df = df.drop(remove, axis=1)
     return df
+# dividend tracker
 
+def dividend_tracker_data():
+    """
+    data for the dividend tracker feature on the streamlit dashboard
+    """
+    url = "https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/2023"
+    data = pd.read_json(url)
+    data['cct_modified'] = pd.to_datetime(data['cct_modified'])
+    df = data.sort_values(by= 'cct_modified',ascending=False)
+    df = df.drop(['_ID','cct_status','year','cct_author_id','cct_created','type','company','bonus'],axis=1)
+    df = df.rename(columns={'company_symbol':'symbol','closure_of_register':'register_closure_date','dividend_share':'dividend_amount','cct_modified':'date'})
+    df = df.reset_index(drop=True)
+    df = df.set_index('date')
+    df = df[['symbol','payment_date','register_closure_date','agm_date','dividend_amount']]
+    return df
 
 # Index & its metric
 

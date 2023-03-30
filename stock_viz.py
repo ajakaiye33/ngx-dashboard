@@ -12,6 +12,7 @@ from wordcloud import WordCloud
 from stock_view.data_prep import data_load, insider_data
 from stock_view.data_prep import top_gainers, top_losers
 from stock_view.data_prep import ngx_50_index, ngx_30_index, ngx_pension_index
+from stock_view.data_prep import dividend_tracker_data
 
 # from stock_view.data_prep import current_p50, current_p30, current_pens
 # from stock_view.data_prep import yesterday_p50, yesterday_p30, yesterday_pens
@@ -258,6 +259,13 @@ def viz_index():
 
 viz_index()
 
+#dividend tracker datarame
+div_data = dividend_tracker_data()
+try:
+    st.subheader("Dividend Tracker")
+    st.dataframe(div_data)
+except Exception:
+    st.text("Ooops... Sorry can't retrieve data at the moment, try later")
 
 # top gainers and losers  columns
 
