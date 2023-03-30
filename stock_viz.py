@@ -9,8 +9,8 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
-from stock_view.data_prep import data_load, insider_data
-from stock_view.data_prep import top_gainers, top_losers
+from stock_view.data_prep import load_equities_data, get_insider_symbols
+from stock_view.data_prep import filter_top_gainers, filter_top_losers
 from stock_view.data_prep import ngx_50_index, ngx_30_index, ngx_pension_index
 from stock_view.data_prep import dividend_tracker_data
 
@@ -55,7 +55,7 @@ st.text(
     "Data is delayed by at least 10 minutes"  # noqa
 )
 
-data2 = insider_data()
+data2 = get_insider_symbols()
 st.set_option("deprecation.showPyplotGlobalUse", False)
 
 
@@ -72,7 +72,7 @@ def wrd_viz(stringy):
         st.text("Ooops! ... Refresh browser now")
 
 
-data = data_load()
+data = load_equities_data()
 
 
 selling = data[(data["Change"] < 0) & (data["PercChange"] < 0)]
@@ -269,8 +269,8 @@ except Exception:
 
 # top gainers and losers  columns
 
-top_g = top_gainers(data)
-top_l = top_losers(data)
+top_g = filter_top_gainers(data)
+top_l = filter_top_losers(data)
 
 try:
 

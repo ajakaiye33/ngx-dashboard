@@ -2,42 +2,45 @@ import pandas as pd
 import json
 from gazpacho import get
 
-
-def data_load(
-    URL="https://doclib.ngxgroup.com/REST/api/statistics/equities/?market="
-    "&sector=&orderby=&pageSize=300&pageNo=0",
-):
+# Data Ingestion and Transformation
+def load_equities_data(url="https://doclib.ngxgroup.com/REST/api/statistics/equities/?market=&sector=&orderby=&pageSize=300&pageNo=0"):
     """
-    Ingest and transform data
+    Ingest and transform equities data.
     """
-    dataz = pd.read_json(URL)
-    # drop all na in data
-    data_api = dataz.dropna()
-    return data_api
+    # Load data from url
+    data = pd.read_json(url)
+    # Remove rows with NaN values
+    data = data.dropna()
+    return data
 
-
-def insider_data(
-    URL="https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/"
-    "main/docs/insider-dealings.csv",
-):
-    df = pd.read_csv(URL, parse_dates=["date_created"])
-    work_element = ["date_created", "company_symbol"]
-    df = df[work_element]
-    df["Last_hours"] = df["date_created"].dt.day
-    df = df.drop("date_created", axis=1)
-    df = df[df["Last_hours"] <= 30]
-    df = df["company_symbol"].unique()
-    df = df.tolist()
-    return df
-
-
-def top_gainers(df):
+# Insider Trading Data
+def get_insider_symbols(url="https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/insider-dealings.csv"):
     """
-    Filter Top Gainers
+    Get a list of company symbols with recent insider dealings.
     """
-    df = df[df["OpeningPrice"] < df["ClosePrice"]]
-    df = df.sort_values(by="Change", ascending=False)
-    remove = [
+    # Load data from url
+    data = pd.read_csv(url, parse_dates=["date_created"])
+    # Keep only the relevant columns
+    data = data[["date_created", "company_symbol"]]
+    # Add a new column with the day of the month
+    data["day"] = data["date_created"].dt.day
+    # Keep only the rows with a day value less than or equal to 30
+    data = data[data["day"] <= 30]
+    # Get the unique company symbols
+    symbols = data["company_symbol"].unique().tolist()
+    return symbols
+
+
+def filter_top_gainers(data):
+    """
+    Filter top gaining equities.
+    """
+    # Keep only the rows where the opening price is less than the closing price
+    data = data[data["OpeningPrice"] < data["ClosePrice"]]
+    # Sort by descending order of change
+    data = data.sort_values(by="Change", ascending=False)
+    # Remove irrelevant columns
+    columns_to_remove = [
         "$id",
         "CalculateChangePercent",
         "Id",
@@ -53,14 +56,20 @@ def top_gainers(df):
         "Company2",
         "TradeDate",
     ]
-    df = df.drop(remove, axis=1)
-    return df
+    data = data.drop(columns_to_remove, axis=1)
+    return data
 
 
-def top_losers(df):
-    df = df[df["OpeningPrice"] > df["ClosePrice"]]
-    df = df.sort_values(by="Change", ascending=True)
-    remove = [
+def filter_top_losers(data):
+    """
+    Filter top losing equities.
+    """
+    # Keep only the rows where the opening price is greater than the closing price
+    data = data[data["OpeningPrice"] > data["ClosePrice"]]
+    # Sort by ascending order of change
+    data = data.sort_values(by="Change", ascending=True)
+    # Remove irrelevant columns
+    columns_to_remove = [
         "$id",
         "CalculateChangePercent",
         "Id",
@@ -76,60 +85,71 @@ def top_losers(df):
         "Company2",
         "TradeDate",
     ]
-    df = df.drop(remove, axis=1)
-    return df
-# dividend tracker
+    data = data.drop(columns_to_remove, axis=1)
+    return data
 
+
+# Define the URL endpoint for corporate actions in 2023
+CORP_ACTIONS_URL = "https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/2023"
+
+# Define a function that retrieves and processes data for the dividend tracker feature
 def dividend_tracker_data():
     """
-    data for the dividend tracker feature on the streamlit dashboard
+    Returns data for the dividend tracker feature on the Streamlit dashboard.
     """
-    url = "https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/2023"
-    data = pd.read_json(url)
+    # Get data from the corporate actions URL and convert it to a Pandas dataframe
+    data = pd.read_json(CORP_ACTIONS_URL)
+    
+    # Convert the 'cct_modified' column to a datetime object and sort the dataframe by this column
     data['cct_modified'] = pd.to_datetime(data['cct_modified'])
-    df = data.sort_values(by= 'cct_modified',ascending=False)
-    df = df.drop(['_ID','cct_status','year','cct_author_id','cct_created','type','company','bonus'],axis=1)
-    df = df.rename(columns={'company_symbol':'symbol','closure_of_register':'register_closure_date','dividend_share':'dividend_amount','cct_modified':'date'})
-    df = df.reset_index(drop=True)
-    df = df.set_index('date')
-    df = df[['symbol','payment_date','register_closure_date','agm_date','dividend_amount']]
-    return df
+    data = data.sort_values(by= 'cct_modified',ascending=False)
+    
+    # Drop unnecessary columns and rename some columns for clarity
+    data = data.drop(['_ID','cct_status','year','cct_author_id','cct_created','type','company','bonus'],axis=1)
+    data = data.rename(columns={'company_symbol':'symbol','closure_of_register':'register_closure_date','dividend_share':'dividend_amount','cct_modified':'date'})
+    
+    # Set the 'date' column as the index and select the relevant columns
+    data = data.reset_index(drop=True)
+    data = data.set_index('date')
+    data = data[['symbol','payment_date','register_closure_date','agm_date','dividend_amount']]
+    
+    return data
 
-# Index & its metric
+# Define the base URL for retrieving index data
+INDEX_DATA_URL = "https://doclib.ngxgroup.com/REST/api/chartdata/"
 
-AP = "https://doclib.ngxgroup.com/REST/api/chartdata/"
+# Define functions for retrieving and processing NGX50, NGX30, and NGXPENSION index data
+def _get_index_data(index_name):
+    """
+    Retrieves index data from the NGX API for a given index name.
+    """
+    # Construct the URL for the given index and retrieve the data
+    url = f"{INDEX_DATA_URL}{index_name}"
+    url_req = get(url)
+    soup = json.dumps(url_req)
+    
+    # Convert the data to a Pandas dataframe and format the 'date' column as a datetime object
+    df = pd.read_json(soup)
+    index_data = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
+    index_data["date"] = pd.to_datetime(index_data["date"], unit="ms")
+    
+    return index_data
 
-# NGX50
 def ngx_50_index():
-    ng50 = "NGX50"
-    URL = f"{AP}{ng50}"
-    url_req = get(URL)
-    soup = json.dumps(url_req)
-    df = pd.read_json(soup)
-    ngx50 = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
-    ngx50["date"] = pd.to_datetime(ngx50["date"], unit="ms")
-    return ngx50
+    """
+    Returns NGX50 index data from the NGX API.
+    """
+    return _get_index_data("NGX50")
 
-
-# NGX30
 def ngx_30_index():
-    ng30 = "NGX30"
-    URL = f"{AP}{ng30}"
-    url_req = get(URL)
-    soup = json.dumps(url_req)
-    df = pd.read_json(soup)
-    ngx30 = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
-    ngx30["date"] = pd.to_datetime(ngx30["date"], unit="ms")
-    return ngx30
+    """
+    Returns NGX30 index data from the NGX API.
+    """
+    return _get_index_data("NGX30")
 
-
-# NGXPENSION
 def ngx_pension_index():
-    ngpens = "NGXPENSION"
-    URL = f"{AP}{ngpens}"
-    url_req = get(URL)
-    soup = json.dumps(url_req)
-    df = pd.read_json(soup)
-    ngxpen = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
-    ngxpen["date"] = pd.to_datetime(ngxpen["date"], unit="ms")
-    return ngxpen
+    """
+    Returns NGXPENSION index data from the NGX API.
+    """
+    return _get_index_data("NGXPENSION")
+
