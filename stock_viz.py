@@ -258,13 +258,19 @@ def viz_index():
             st.plotly_chart(fig3)
     except Exception:
         st.text("Sorry, Can't retrieve data at the moment")
-def display_news():
-    getnew_link = news_links()
-    for news,links in getnew_link.items():
-        st.markdown(f"{news}, [Read More]({links})\n")
+
 
 viz_index()
-display_news()
+
+
+getnew_link = news_links()
+try:
+    st.subheader('Latest News')
+    for news,links in getnew_link.items():
+        st.markdown(f"{news}, [Read More]({links})")
+except Exception:
+    st.text("Sorry news site not responding")
+
 
 #dividend tracker datarame
 div_data = dividend_tracker_data()
@@ -278,6 +284,7 @@ except Exception:
 
 top_g = filter_top_gainers(data)
 top_l = filter_top_losers(data)
+
 
 try:
 
