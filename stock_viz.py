@@ -263,7 +263,7 @@ def viz_index():
 viz_index()
 
 
-getnew_link = news_links()
+getnew_link = latest_news()
 try:
     st.subheader('Latest News')
     for news,links in getnew_link.items():
