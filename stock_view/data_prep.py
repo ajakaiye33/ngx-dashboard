@@ -5,7 +5,7 @@ Created on Tue Jun 17 00:59:25 2021
 
 import pandas as pd
 import json
-from gazpacho import get
+from gazpacho import get,Soup
 
 # Data Ingestion and Transformation
 def load_equities_data(url="https://doclib.ngxgroup.com/REST/api/statistics/equities/?market=&sector=&orderby=&pageSize=300&pageNo=0"):
@@ -158,3 +158,14 @@ def ngx_pension_index():
     """
     return _get_index_data("NGXPENSION")
 
+def latest_news():
+    """
+    Scrape stock news and links
+    """
+    html = get('https://stocksng.com/category/business-economy/')
+    soup = Soup(html)
+    article_title = soup.find('h2',{'class' : 'entry-title'})
+    news_links = {i.find('a').text:i.find('a').attrs['href'] for i in article_title}
+    #for news, link in news_links.items():
+    retun news_links
+    

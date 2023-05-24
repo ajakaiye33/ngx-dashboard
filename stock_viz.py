@@ -13,6 +13,7 @@ from stock_view.data_prep import load_equities_data, get_insider_symbols
 from stock_view.data_prep import filter_top_gainers, filter_top_losers
 from stock_view.data_prep import ngx_50_index, ngx_30_index, ngx_pension_index
 from stock_view.data_prep import dividend_tracker_data
+from stock_view.data_prep import latest_news
 
 # from stock_view.data_prep import current_p50, current_p30, current_pens
 # from stock_view.data_prep import yesterday_p50, yesterday_p30, yesterday_pens
@@ -74,10 +75,12 @@ def wrd_viz(stringy):
 
 data = load_equities_data()
 
-
-selling = data[(data["Change"] < 0) & (data["PercChange"] < 0)]
-# selling
-betting = data[(data["Volume"] > 0) & (data["PercChange"] > 0)]
+try:
+    selling = data[(data["Change"] < 0) & (data["PercChange"] < 0)]
+    # selling
+    betting = data[(data["Volume"] > 0) & (data["PercChange"] > 0)]
+except KeyError:
+    st.text("Market Information still recalibrating...")
 # top gainers
 
 
@@ -255,9 +258,13 @@ def viz_index():
             st.plotly_chart(fig3)
     except Exception:
         st.text("Sorry, Can't retrieve data at the moment")
-
+def display_news():
+    getnew_link = news_links()
+    for news,links in getnew_link.items():
+        st.markdown(f"{news}, [Read More]({links})\n")
 
 viz_index()
+display_news()
 
 #dividend tracker datarame
 div_data = dividend_tracker_data()
