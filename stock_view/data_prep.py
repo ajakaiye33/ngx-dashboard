@@ -7,6 +7,7 @@ import pandas as pd
 import json
 from gazpacho import get, Soup
 from datetime import datetime
+import requests
 
 # Data Ingestion and Transformation
 def load_equities_data(
@@ -100,11 +101,6 @@ def filter_top_losers(data):
     return data
 
 
-# Define the URL endpoint for corporate actions in 2023
-get_year = datetime.now().year
-CORP_ACTIONS_URL = (
-    f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{get_year}"
-)
 
 # Define a function that retrieves and processes data for the dividend tracker feature
 def dividend_tracker_data():
@@ -112,49 +108,111 @@ def dividend_tracker_data():
     Returns data for the dividend tracker feature on the Streamlit dashboard.
     """
     # Get data from the corporate actions URL and convert it to a Pandas dataframe
-    data = pd.read_json(CORP_ACTIONS_URL)
+    try:
+        # Define the URL endpoint for corporate actions in 2023
+        current_year = datetime.now().year
+        previous_year = current_year - 1
+        #CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
+        CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
 
-    # Convert the 'cct_modified' column to a datetime object and sort the dataframe by this column
-    data["cct_modified"] = pd.to_datetime(data["cct_modified"])
-    data = data.sort_values(by="cct_modified", ascending=False)
+        data = pd.read_json(CORP_ACTIONS_URL)
+    
 
-    # Drop unnecessary columns and rename some columns for clarity
-    data = data.drop(
-        [
-            "_ID",
-            "cct_status",
-            "year",
-            "cct_author_id",
-            "cct_created",
-            "type",
-            "company",
-            "bonus",
-        ],
-        axis=1,
-    )
-    data = data.rename(
-        columns={
-            "company_symbol": "symbol",
-            "closure_of_register": "register_closure_date",
-            "dividend_share": "dividend_amount",
-            "cct_modified": "date",
-        }
-    )
+        # Convert the 'cct_modified' column to a datetime object and sort the dataframe by this column
+        data["cct_modified"] = pd.to_datetime(data["cct_modified"])
+        data = data.sort_values(by="cct_modified", ascending=False)
 
-    # Set the 'date' column as the index and select the relevant columns
-    data = data.reset_index(drop=True)
-    data = data.set_index("date")
-    data = data[
-        [
-            "symbol",
-            "payment_date",
-            "register_closure_date",
-            "agm_date",
-            "dividend_amount",
+        # Drop unnecessary columns and rename some columns for clarity
+        data = data.drop(
+            [
+                "_ID",
+                "cct_status",
+                "year",
+                "cct_author_id",
+                "cct_created",
+                "type",
+                "company",
+                "bonus",
+            ],
+            axis=1,
+        )
+        data = data.rename(
+            columns={
+                "company_symbol": "symbol",
+                "closure_of_register": "register_closure_date",
+                "dividend_share": "dividend_amount",
+                "cct_modified": "date",
+            }
+        )
+
+        # Set the 'date' column as the index and select the relevant columns
+        data = data.reset_index(drop=True)
+        data = data.set_index("date")
+        data = data[
+            [
+                "symbol",
+                "payment_date",
+                "register_closure_date",
+                "agm_date",
+                "dividend_amount",
+            ]
         ]
-    ]
+        return data
+    except Exception as e:
+        print("Data not available yet")
 
-    return data
+    try:
+        # Define the URL endpoint for corporate actions in 2023
+        current_year = datetime.now().year
+        previous_year = current_year - 1
+        #CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
+        CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{previous_year}"
+
+        data = pd.read_json(CORP_ACTIONS_URL)
+    
+
+        # Convert the 'cct_modified' column to a datetime object and sort the dataframe by this column
+        data["cct_modified"] = pd.to_datetime(data["cct_modified"])
+        data = data.sort_values(by="cct_modified", ascending=False)
+
+        # Drop unnecessary columns and rename some columns for clarity
+        data = data.drop(
+            [
+                "_ID",
+                "cct_status",
+                "year",
+                "cct_author_id",
+                "cct_created",
+                "type",
+                "company",
+                "bonus",
+            ],
+            axis=1,
+        )
+        data = data.rename(
+            columns={
+                "company_symbol": "symbol",
+                "closure_of_register": "register_closure_date",
+                "dividend_share": "dividend_amount",
+                "cct_modified": "date",
+            }
+        )
+
+        # Set the 'date' column as the index and select the relevant columns
+        data = data.reset_index(drop=True)
+        data = data.set_index("date")
+        data = data[
+            [
+                "symbol",
+                "payment_date",
+                "register_closure_date",
+                "agm_date",
+                "dividend_amount",
+            ]
+        ]
+        return data
+    except Exception as e:
+        print("Data not available yet")
 
 
 # Define the base URL for retrieving index data
