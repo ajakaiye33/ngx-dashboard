@@ -5,11 +5,13 @@ Created on Tue Jun 17 00:59:25 2021
 
 import pandas as pd
 import json
-from gazpacho import get,Soup
+from gazpacho import get, Soup
 from datetime import datetime
 
 # Data Ingestion and Transformation
-def load_equities_data(url="https://doclib.ngxgroup.com/REST/api/statistics/equities/?market=&sector=&orderby=&pageSize=300&pageNo=0"):
+def load_equities_data(
+    url="https://doclib.ngxgroup.com/REST/api/statistics/equities/?market=&sector=&orderby=&pageSize=300&pageNo=0",
+):
     """
     Ingest and transform equities data.
     """
@@ -19,8 +21,11 @@ def load_equities_data(url="https://doclib.ngxgroup.com/REST/api/statistics/equi
     data = data.dropna()
     return data
 
+
 # Insider Trading Data
-def get_insider_symbols(url="https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/insider-dealings.csv"):
+def get_insider_symbols(
+    url="https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/insider-dealings.csv",
+):
     """
     Get a list of company symbols with recent insider dealings.
     """
@@ -97,7 +102,9 @@ def filter_top_losers(data):
 
 # Define the URL endpoint for corporate actions in 2023
 get_year = datetime.now().year
-CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{get_year}"
+CORP_ACTIONS_URL = (
+    f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{get_year}"
+)
 
 # Define a function that retrieves and processes data for the dividend tracker feature
 def dividend_tracker_data():
@@ -106,21 +113,49 @@ def dividend_tracker_data():
     """
     # Get data from the corporate actions URL and convert it to a Pandas dataframe
     data = pd.read_json(CORP_ACTIONS_URL)
-    
+
     # Convert the 'cct_modified' column to a datetime object and sort the dataframe by this column
-    data['cct_modified'] = pd.to_datetime(data['cct_modified'])
-    data = data.sort_values(by= 'cct_modified',ascending=False)
-    
+    data["cct_modified"] = pd.to_datetime(data["cct_modified"])
+    data = data.sort_values(by="cct_modified", ascending=False)
+
     # Drop unnecessary columns and rename some columns for clarity
-    data = data.drop(['_ID','cct_status','year','cct_author_id','cct_created','type','company','bonus'],axis=1)
-    data = data.rename(columns={'company_symbol':'symbol','closure_of_register':'register_closure_date','dividend_share':'dividend_amount','cct_modified':'date'})
-    
+    data = data.drop(
+        [
+            "_ID",
+            "cct_status",
+            "year",
+            "cct_author_id",
+            "cct_created",
+            "type",
+            "company",
+            "bonus",
+        ],
+        axis=1,
+    )
+    data = data.rename(
+        columns={
+            "company_symbol": "symbol",
+            "closure_of_register": "register_closure_date",
+            "dividend_share": "dividend_amount",
+            "cct_modified": "date",
+        }
+    )
+
     # Set the 'date' column as the index and select the relevant columns
     data = data.reset_index(drop=True)
-    data = data.set_index('date')
-    data = data[['symbol','payment_date','register_closure_date','agm_date','dividend_amount']]
-    
+    data = data.set_index("date")
+    data = data[
+        [
+            "symbol",
+            "payment_date",
+            "register_closure_date",
+            "agm_date",
+            "dividend_amount",
+        ]
+    ]
+
     return data
+
 
 # Define the base URL for retrieving index data
 INDEX_DATA_URL = "https://doclib.ngxgroup.com/REST/api/chartdata/"
@@ -134,13 +169,14 @@ def _get_index_data(index_name):
     url = f"{INDEX_DATA_URL}{index_name}"
     url_req = get(url)
     soup = json.dumps(url_req)
-    
+
     # Convert the data to a Pandas dataframe and format the 'date' column as a datetime object
     df = pd.read_json(soup)
     index_data = pd.DataFrame(df["IndiciesData"].to_list(), columns=["date", "prices"])
     index_data["date"] = pd.to_datetime(index_data["date"], unit="ms")
-    
+
     return index_data
+
 
 def ngx_50_index():
     """
@@ -148,11 +184,13 @@ def ngx_50_index():
     """
     return _get_index_data("NGX50")
 
+
 def ngx_30_index():
     """
     Returns NGX30 index data from the NGX API.
     """
     return _get_index_data("NGX30")
+
 
 def ngx_pension_index():
     """
@@ -160,14 +198,14 @@ def ngx_pension_index():
     """
     return _get_index_data("NGXPENSION")
 
+
 def latest_news():
     """
     Scrape stock news and links
     """
-    html = get('https://stocksng.com/category/business-economy/')
+    html = get("https://stocksng.com/category/business-economy/")
     soup = Soup(html)
-    article_title = soup.find('h2',{'class' : 'entry-title'})
-    news_links = {i.find('a').text:i.find('a').attrs['href'] for i in article_title}
-    #for news, link in news_links.items():
+    article_title = soup.find("h2", {"class": "entry-title"})
+    news_links = {i.find("a").text: i.find("a").attrs["href"] for i in article_title}
+    # for news, link in news_links.items():
     return news_links
-    

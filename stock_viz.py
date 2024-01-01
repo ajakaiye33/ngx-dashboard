@@ -18,7 +18,7 @@ from stock_view.data_prep import latest_news
 # from stock_view.data_prep import current_p50, current_p30, current_pens
 # from stock_view.data_prep import yesterday_p50, yesterday_p30, yesterday_pens
 
-import streamlit.components.v1 as components
+# import streamlit.components.v1 as components
 
 
 matplotlib.use("agg")
@@ -265,14 +265,14 @@ viz_index()
 
 getnew_link = latest_news()
 try:
-    st.subheader('Latest News')
-    for news,links in getnew_link.items():
+    st.subheader("Latest News")
+    for news, links in getnew_link.items():
         st.markdown(f"{news}, [Read More]({links})")
 except Exception:
     st.text("Sorry news site not responding")
 
 
-#dividend tracker datarame
+# dividend tracker datarame
 div_data = dividend_tracker_data()
 try:
     st.subheader("Dividend Tracker")
@@ -297,5 +297,3 @@ try:
         st.write(top_l)
 except Exception:
     st.text("Ooops!... Sorry can't retrieve data at the moment,try later!")
-
-
