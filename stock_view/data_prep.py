@@ -7,7 +7,8 @@ import pandas as pd
 import json
 from gazpacho import get, Soup
 from datetime import datetime
-import requests
+
+# import requests
 
 # Data Ingestion and Transformation
 def load_equities_data(
@@ -101,7 +102,6 @@ def filter_top_losers(data):
     return data
 
 
-
 # Define a function that retrieves and processes data for the dividend tracker feature
 def dividend_tracker_data():
     """
@@ -112,11 +112,12 @@ def dividend_tracker_data():
         # Define the URL endpoint for corporate actions in 2023
         current_year = datetime.now().year
         previous_year = current_year - 1
-        #CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
-        CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
+        # CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
+        CORP_ACTIONS_URL = (
+            f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
+        )
 
         data = pd.read_json(CORP_ACTIONS_URL)
-    
 
         # Convert the 'cct_modified' column to a datetime object and sort the dataframe by this column
         data["cct_modified"] = pd.to_datetime(data["cct_modified"])
@@ -159,17 +160,18 @@ def dividend_tracker_data():
         ]
         return data
     except Exception as e:
-        print("Data not available yet")
+        print(f"Data not available yet {e}")
 
     try:
         # Define the URL endpoint for corporate actions in 2023
         current_year = datetime.now().year
         previous_year = current_year - 1
-        #CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
-        CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{previous_year}"
+        # CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{current_year}"
+        CORP_ACTIONS_URL = (
+            f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{previous_year}"
+        )
 
         data = pd.read_json(CORP_ACTIONS_URL)
-    
 
         # Convert the 'cct_modified' column to a datetime object and sort the dataframe by this column
         data["cct_modified"] = pd.to_datetime(data["cct_modified"])
@@ -212,7 +214,7 @@ def dividend_tracker_data():
         ]
         return data
     except Exception as e:
-        print("Data not available yet")
+        print(f"Data not available yet {e}")
 
 
 # Define the base URL for retrieving index data
