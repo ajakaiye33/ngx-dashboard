@@ -6,6 +6,7 @@ Created on Tue Jun 17 00:59:25 2021
 import pandas as pd
 import json
 from gazpacho import get,Soup
+from datetime import datetime
 
 # Data Ingestion and Transformation
 def load_equities_data(url="https://doclib.ngxgroup.com/REST/api/statistics/equities/?market=&sector=&orderby=&pageSize=300&pageNo=0"):
@@ -95,7 +96,8 @@ def filter_top_losers(data):
 
 
 # Define the URL endpoint for corporate actions in 2023
-CORP_ACTIONS_URL = "https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/2023"
+get_year = datetime.now().year
+CORP_ACTIONS_URL = f"https://ngxgroup.com/wp-json/corporate-actions/v1/by-year/{get_year}"
 
 # Define a function that retrieves and processes data for the dividend tracker feature
 def dividend_tracker_data():
