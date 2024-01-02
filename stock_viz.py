@@ -68,9 +68,9 @@ def wrd_viz(stringy):
         plt.figure(figsize=[20, 20])
         plt.axis("off")
         plt.imshow(wrdcld, interpolation="bilinear")
-        # plt.show()
-    except Exception:  # noqa
-        st.text("Ooops! ... Refresh browser now")
+        plt.show()
+    except Exception as e:
+        st.text(f"Ooops! ... Refresh browser now {e}")
 
 
 data = load_equities_data()
@@ -95,7 +95,7 @@ try:
             width=500,
             height=500,
             color=data["PercChange"],
-            color_continuous_scale="BuGn",
+            color_continuous_scale=[(0, "red"), (1, "green")],
             title="Current Temperature of The Market",
         )
         fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
@@ -288,7 +288,7 @@ top_l = filter_top_losers(data)
 
 try:
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([3,3])
     with col1:
         st.subheader("Todays Top Gainers")
         st.write(top_g)

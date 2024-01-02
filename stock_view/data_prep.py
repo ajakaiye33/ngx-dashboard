@@ -69,7 +69,7 @@ def filter_top_gainers(data):
         "Company2",
         "TradeDate",
     ]
-    data = data.drop(columns_to_remove, axis=1)
+    data = data.drop(columns_to_remove, axis=1).reset_index(drop=True)
     return data
 
 
@@ -98,7 +98,7 @@ def filter_top_losers(data):
         "Company2",
         "TradeDate",
     ]
-    data = data.drop(columns_to_remove, axis=1)
+    data = data.drop(columns_to_remove, axis=1).reset_index(drop=True)
     return data
 
 
