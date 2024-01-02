@@ -291,9 +291,9 @@ try:
     col1, col2 = st.columns([3,3])
     with col1:
         st.subheader("Todays Top Gainers")
-        st.write(top_g)
+        st.dataframe(top_g)
     with col2:
         st.subheader("Todays Top Losers")
-        st.write(top_l)
+        st.dataframe(top_l)
 except Exception:
     st.text("Ooops!... Sorry can't retrieve data at the moment,try later!")
