@@ -6,7 +6,7 @@ Created on Tue Jun 17 00:59:25 2021
 import pandas as pd
 import json
 from gazpacho import get, Soup
-from datetime import datetime
+from datetime import datetime,timedelta
 
 # import requests
 
@@ -40,6 +40,7 @@ def get_insider_symbols(
     # Keep only the rows with a day value less than or equal to 30
     data = data[data["day"] <= 30]
     # Get the unique company symbols
+    # Keep only the rows with a day value within the last 6 months and less than or equal to 30
     symbols = data["company_symbol"].unique().tolist()
     return symbols
 
@@ -264,8 +265,12 @@ def latest_news():
     Scrape stock news and links
     """
     html = get("https://stocksng.com/category/business-economy/")
-    soup = Soup(html)
-    article_title = soup.find("h2", {"class": "entry-title"})
-    news_links = {i.find("a").text: i.find("a").attrs["href"] for i in article_title}
-    # for news, link in news_links.items():
-    return news_links
+    try:
+        soup = Soup(html)
+        article_title = soup.find("div", {"class": "date"})
+        news_links = {article_title[i].find("a").text: article_title[i].find("a").attrs["href"] for i in range(1, len(article_title))}
+        # for news, link in news_links.items():
+        return news_links
+    except Exception as e:
+        print(f"Data on latest market news not available yet {e}")
+    return 
