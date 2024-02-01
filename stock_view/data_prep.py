@@ -6,7 +6,7 @@ Created on Tue Jun 17 00:59:25 2021
 import pandas as pd
 import json
 from gazpacho import get, Soup
-from datetime import datetime,timedelta
+from datetime import datetime
 
 # import requests
 
@@ -264,13 +264,19 @@ def latest_news():
     """
     Scrape stock news and links
     """
+    # now_date = datetime.now().today().strftime("%d-%m-%Y")
     html = get("https://stocksng.com/category/business-economy/")
-    try:
-        soup = Soup(html)
-        article_title = soup.find("div", {"class": "date"})
-        news_links = {article_title[i].find("a").text: article_title[i].find("a").attrs["href"] for i in range(1, len(article_title))}
-        # for news, link in news_links.items():
-        return news_links
-    except Exception as e:
-        print(f"Data on latest market news not available yet {e}")
-    return 
+    soup = Soup(html)
+    date = soup.find("div", {"class": "date"})
+    date_title_url = []
+    for i in range(1, len(date)):
+        date_title_url.append(
+            {
+                "date": datetime.strptime(date[i].find("a").text, "%B %d, %Y").strftime(
+                    "%d-%m-%Y"
+                ),
+                "title": date[i].find("a").attrs["title"],
+                "url": date[i].find("a").attrs["href"],
+            }
+        )
+    return date_title_url

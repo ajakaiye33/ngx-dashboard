@@ -266,8 +266,8 @@ viz_index()
 getnew_link = latest_news()
 try:
     st.subheader("Latest News")
-    for news, links in getnew_link.items():
-        st.markdown(f"{news}, [Read More]({links})")
+    for i in getnew_link:
+        st.markdown(f"{i['title']}, [Read More]({i['url']})-{i['date']}")
 except Exception:
     st.text("Sorry news site not responding")
 
@@ -288,7 +288,7 @@ top_l = filter_top_losers(data)
 
 try:
 
-    col1, col2 = st.columns([3,3])
+    col1, col2 = st.columns([3, 3])
     with col1:
         st.subheader("Todays Top Gainers")
         st.dataframe(top_g)
