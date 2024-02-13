@@ -269,14 +269,17 @@ def latest_news():
     soup = Soup(html)
     date = soup.find("div", {"class": "date"})
     date_title_url = []
-    for i in range(1, len(date)):
-        date_title_url.append(
-            {
-                "date": datetime.strptime(date[i].find("a").text, "%B %d, %Y").strftime(
-                    "%d-%m-%Y"
-                ),
-                "title": date[i].find("a").attrs["title"],
-                "url": date[i].find("a").attrs["href"],
-            }
-        )
-    return date_title_url
+    try:
+        for i in range(1, len(date)):
+            date_title_url.append(
+                {
+                    "date": datetime.strptime(
+                        date[i].find("a").text, "%B %d, %Y"
+                    ).strftime("%d-%m-%Y"),
+                    "title": date[i].find("a").attrs["title"],
+                    "url": date[i].find("a").attrs["href"],
+                }
+            )
+        return date_title_url
+    except Exception as e:
+        print(f"Market news data not available now ! {e}")
