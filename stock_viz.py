@@ -228,7 +228,7 @@ try:
 
     ngx50_metric, ngx30_metric, ngxpens_metric = st.columns(3)
     ngx50_metric.metric(
-        label="NGX50 Index", value=ngx50_current_prix, delta=f"{diff_50}%"
+        label="All Share Index(ASI)", value=ngx50_current_prix, delta=f"{diff_50}%"
     )
     ngx30_metric.metric(
         label="NGX30 Index", value=ngx30_current_prix, delta=f"{diff_30}%"
@@ -248,7 +248,7 @@ def viz_index():
 
         fifty, thirty, pens = st.columns(3)
         with fifty:
-            fig1 = px.line(ngx_50, x="date", y="prices", title="NGX 50 Index")
+            fig1 = px.line(ngx_50, x="date", y="prices", title="All Share Index")
             st.plotly_chart(fig1)
         with thirty:
             fig2 = px.line(ngx_30, x="date", y="prices", title="NGX 30 Index")

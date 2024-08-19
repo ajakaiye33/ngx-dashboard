@@ -26,15 +26,19 @@ def load_equities_data(
 
 # Insider Trading Data
 def get_insider_symbols(
-    url="https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/insider-dealings.csv",
+    #url="https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/insider-dealings.csv",
+    url = "https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/coy_disclosures.json"
 ):
     """
     Get a list of company symbols with recent insider dealings.
     """
     # Load data from url
-    data = pd.read_csv(url, parse_dates=["date_created"])
+    #data = pd.read_csv(url, parse_dates=["date_created"])
+    data = pd.read_json(url)
     # Keep only the relevant columns
-    data = data[["date_created", "company_symbol"]]
+    data = data[["date_created", "company_symbol","news_class"]]
+    data["date_created"] = pd.to_datetime(data["date_created"])
+    data = data[data['news_class'] == "DirectorsDealings"]
     # Add a new column with the day of the month
     data["day"] = data["date_created"].dt.day
     # Keep only the rows with a day value less than or equal to 30
@@ -141,9 +145,10 @@ def dividend_tracker_data():
         data = data.rename(
             columns={
                 "company_symbol": "symbol",
-                "closure_of_register": "register_closure_date",
-                "dividend_share": "dividend_amount",
-                "cct_modified": "date",
+                "closure_of_register": "Register Closure Date",
+                "dividend_share": "Dividend Amount",
+                "cct_modified": "date", "payment_date": "Payment Date",
+                "agm_date": "Agm Date",
             }
         )
 
@@ -153,10 +158,10 @@ def dividend_tracker_data():
         data = data[
             [
                 "symbol",
-                "payment_date",
-                "register_closure_date",
-                "agm_date",
-                "dividend_amount",
+                "Payment Date",
+                "Register Closure Date",
+                "Agm Date",
+                "Dividend Amount",
             ]
         ]
         return data
@@ -195,9 +200,10 @@ def dividend_tracker_data():
         data = data.rename(
             columns={
                 "company_symbol": "symbol",
-                "closure_of_register": "register_closure_date",
-                "dividend_share": "dividend_amount",
-                "cct_modified": "date",
+                "closure_of_register": "Register Closure Date",
+                "dividend_share": "Dividend Amount",
+                "cct_modified": "date","payment_date": "Payment Date",
+                "agmt_date": "Agm Date",
             }
         )
 
@@ -207,10 +213,10 @@ def dividend_tracker_data():
         data = data[
             [
                 "symbol",
-                "payment_date",
-                "register_closure_date",
-                "agm_date",
-                "dividend_amount",
+                "Payment Date",
+                "Register Closure Date",
+                "Agm Date",
+                "Dividend Amount",
             ]
         ]
         return data
@@ -243,7 +249,7 @@ def ngx_50_index():
     """
     Returns NGX50 index data from the NGX API.
     """
-    return _get_index_data("NGX50")
+    return _get_index_data("ASI")
 
 
 def ngx_30_index():
