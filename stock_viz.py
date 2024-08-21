@@ -17,39 +17,8 @@ from stock_view.data_prep import ngx_50_index, ngx_30_index, ngx_pension_index
 from stock_view.data_prep import dividend_tracker_data
 from stock_view.data_prep import latest_news
 
-# from stock_view.data_prep import current_p50, current_p30, current_pens
-# from stock_view.data_prep import yesterday_p50, yesterday_p30, yesterday_pens
-
-# import streamlit.components.v1 as components
-
-
 matplotlib.use("agg")
 
-
-# st.set_page_config(
-#     page_icon=":chart_with_upwards_trend:",
-#     layout="wide",
-#     initial_sidebar_state="collapsed",
-# )
-
-
-# st.markdown("<style> body {color: white;}</style>", unsafe_allow_html=True)
-# st.markdown(
-#     "<h1 style='text-align: center; margin-top: 15px;'>Stock Market Live Dashboard</h1>",  # noqa
-#     unsafe_allow_html=True,
-# )
-# st.markdown(
-#     "<style> .css-18c15ts {padding-top: 1rem; margin-top:-75px;} </style>",
-#     unsafe_allow_html=True,
-# )
-
-# st.markdown(
-#     """ <style>
-# # MainMenu {visibility: hidden;}
-# footer {visibility: hidden;}
-# </style> """,
-#     unsafe_allow_html=True,
-# )
 #Page configuration
 st.set_page_config(
     page_title="Stock Market Dashboard",
@@ -138,20 +107,6 @@ st.markdown(
 
 
 data2 = get_insider_symbols()
-#st.set_option("deprecation.showPyplotGlobalUse", False)
-
-
-# def wrd_viz(stringy):
-#     try:
-#         wrdcld = WordCloud(width=1400, height=1000).generate(
-#             ",".join(symbol for symbol in stringy)
-#         )
-#         plt.figure(figsize=[20, 20])
-#         plt.axis("off")
-#         plt.imshow(wrdcld, interpolation="bilinear")
-#         plt.show()
-#     except Exception as e:
-#         st.text(f"Ooops! ... Refresh browser now {e}")
 
 def wrd_viz(stringy):
     try:
