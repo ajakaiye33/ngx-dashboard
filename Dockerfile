@@ -1,6 +1,5 @@
-
 # Use the official Python image as a base image
-FROM python:3.9-slim
+FROM python:3.8.13-slim-buster
 
 # Set environment variables
 ENV STREAMLIT_SERVER_PORT=8501
