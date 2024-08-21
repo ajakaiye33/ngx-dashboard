@@ -158,7 +158,7 @@ try:
         """,
         unsafe_allow_html=True
     )
-            fig = px.treemap(
+            fjg = px.treemap(
                 data,
                 path=["Sector", "Symbol"],
                 values="Volume",
@@ -168,8 +168,8 @@ try:
                 color_continuous_scale=[(0, "red"), (1, "green")],
                 #title="Current Temperature of The Market",
             )
-            fig.update_layout(margin=dict(t=50, l=25, r=25, b=25),showlegend=False)
-            st.plotly_chart(fig, use_container_width=True)
+            fjg.update_layout(margin=dict(t=50, l=25, r=25, b=25),showlegend=False)
+            st.plotly_chart(fjg, use_container_width=True)
 
     with wod_cld_cont:
         with st.container():
