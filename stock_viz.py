@@ -141,17 +141,35 @@ data2 = get_insider_symbols()
 #st.set_option("deprecation.showPyplotGlobalUse", False)
 
 
+# def wrd_viz(stringy):
+#     try:
+#         wrdcld = WordCloud(width=1400, height=1000).generate(
+#             ",".join(symbol for symbol in stringy)
+#         )
+#         plt.figure(figsize=[20, 20])
+#         plt.axis("off")
+#         plt.imshow(wrdcld, interpolation="bilinear")
+#         plt.show()
+#     except Exception as e:
+#         st.text(f"Ooops! ... Refresh browser now {e}")
+
 def wrd_viz(stringy):
     try:
+        # Generate the word cloud
         wrdcld = WordCloud(width=1400, height=1000).generate(
             ",".join(symbol for symbol in stringy)
         )
-        plt.figure(figsize=[20, 20])
-        plt.axis("off")
-        plt.imshow(wrdcld, interpolation="bilinear")
-        plt.show()
+        
+        # Create a Matplotlib figure and axis
+        fig, ax = plt.subplots(figsize=(20, 20))
+        ax.axis("off")  # Hide axes
+        ax.imshow(wrdcld, interpolation="bilinear")
+        
+        # Return the figure
+        return fig
     except Exception as e:
         st.text(f"Ooops! ... Refresh browser now {e}")
+        return None
 
 
 data = load_equities_data()
@@ -189,20 +207,14 @@ try:
                 data,
                 path=["Sector", "Symbol"],
                 values="Volume",
-                width=500,
+                width=900,
                 height=500,
                 color=data["PercChange"],
                 color_continuous_scale=[(0, "red"), (1, "green")],
                 #title="Current Temperature of The Market",
             )
-            fig.update_layout(margin=dict(t=50, l=25, r=25, b=25))
+            fig.update_layout(margin=dict(t=50, l=25, r=25, b=25),showlegend=False)
             st.plotly_chart(fig, use_container_width=True)
-        # wod_cld_cont.text(" ")
-        # wod_cld_cont.text(" ")
-        # wod_cld_cont.text(" ")
-        # wod_cld_cont.text(" ")
-        # wod_cld_cont.text(" ")
-        # wod_cld_cont.text(" ")
 
     with wod_cld_cont:
         with st.container():
@@ -247,12 +259,14 @@ try:
                 selling,
                 x="Symbol",
                 y="PercChange",
+                orientation='v',
                 #title="Stocks Being Dumped",
                 color="Symbol",
-                width=500,
+                width=700,
                 height=500,
                 labels={"Symbol": "stocks", "PercChange": "%Change"},
             )
+            fix.update_layout(showlegend=False)
             st.plotly_chart(fix)
     with hot:
         with st.container():
@@ -271,21 +285,16 @@ try:
         """,
         unsafe_allow_html=True
     )
-
             fog = px.bar(
                 betting,
                 x="Symbol",
                 y="Change",
-                #title="Stocks on the Run",
-                color="PercChange",
-                width=500,
+                orientation='v',
+                width=700,
                 height=500,
-                labels={
-                    "Symbol": "stocks",
-                    "Change": "Gains-Naira",
-                    "PercChange": "%change",
-                },
+                labels={"Symbol": "stocks","Change": "Gains-Naira","PercChange": "Change"},
             )
+            fog.update_layout(showlegend=False)
             st.plotly_chart(fog)
     with value:
         with st.container():
@@ -309,13 +318,15 @@ try:
                 data,
                 x="Symbol",
                 y="Value",
+                orientation='v',
                 hover_name="Company2",
-                width=500,
+                width=700,
                 height=500,
                 #title="Where The Money's at (N-Naira)",
                 color="Symbol",
                 labels={"Symbol": "Stocks", "Value": "Naira"},
             )
+            monei.update_layout(showlegend=False)
             st.plotly_chart(monei)
 
 except Exception:  # noqa
