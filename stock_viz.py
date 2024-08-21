@@ -138,7 +138,7 @@ st.markdown(
 
 
 data2 = get_insider_symbols()
-st.set_option("deprecation.showPyplotGlobalUse", False)
+#st.set_option("deprecation.showPyplotGlobalUse", False)
 
 
 def wrd_viz(stringy):
