@@ -211,8 +211,9 @@ def dividend_tracker_data():
         )
 
         # Set the 'date' column as the index and select the relevant columns
-        data = data.reset_index(drop=True)
+        
         data = data.set_index("date")
+        data = data.reset_index(drop=True)
         data = data[
             [
                 "symbol",
