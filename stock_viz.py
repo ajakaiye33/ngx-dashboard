@@ -115,6 +115,12 @@ st.markdown("""
             margin-top: -45px;
         }
     }
+    .css-1d391kg {
+        overflow-x: auto;
+    }
+    .css-12c6pdh {
+        max-width: 100% !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 # Title
