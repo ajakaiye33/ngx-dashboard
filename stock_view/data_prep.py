@@ -7,10 +7,12 @@ import pandas as pd
 import json
 from gazpacho import get, Soup
 from datetime import datetime
+import streamlit as st
 
 # import requests
 
 # Data Ingestion and Transformation
+@st.cache_data(ttl=300)
 def load_equities_data(
     url="https://doclib.ngxgroup.com/REST/api/statistics/equities/?market=&sector=&orderby=&pageSize=300&pageNo=0",
 ):
@@ -25,6 +27,7 @@ def load_equities_data(
 
 
 # Insider Trading Data
+@st.cache_data()
 def get_insider_symbols(
     #url="https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/insider-dealings.csv",
     url = "https://raw.githubusercontent.com/ajakaiye33/ngrcoydisclosures/main/docs/coy_disclosures.json"

@@ -518,7 +518,7 @@ try:
     """,
     unsafe_allow_html=True
 )
-    st.dataframe(div_data)
+    st.dataframe(div_data, use_container_width=True)
 except Exception:
     st.text("Ooops... Sorry can't retrieve data at the moment, try later")
 
@@ -548,7 +548,7 @@ try:
     """,
     unsafe_allow_html=True
 )
-        st.dataframe(top_g)
+        st.dataframe(top_g, use_container_width=True)
     with col2:
         #st.subheader("Todays Top Losers")
         st.markdown(
@@ -566,6 +566,6 @@ try:
     """,
     unsafe_allow_html=True
 )
-        st.dataframe(top_l)
+        st.dataframe(top_l, use_container_width=True)
 except Exception:
     st.text("Ooops!... Sorry can't retrieve data at the moment,try later!")
